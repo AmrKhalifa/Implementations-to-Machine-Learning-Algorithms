@@ -25,3 +25,11 @@ def forward(x):
 	output = hid_to_out.T @ h
 	output = softmax(output)
 	return output
+
+def get_loss(input, target):
+
+	pass 
+
+def backward(loss): 
+
+	pass 
