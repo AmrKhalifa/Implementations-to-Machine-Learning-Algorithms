@@ -1,11 +1,12 @@
 import numpy as np 
+import matplotlib.pyplot as plt 
 
 in_features = 2
 out_features = 3 
 hidden_size = 10
 
-in_to_hid = np.randn((hidden_size, in_features))/1000
-hid_to_out = np.randn((out_features, hidden_size))/1000
+in_to_hid = (np.random.randn(hidden_size, in_features))/1000
+hid_to_out = (np.random.randn(out_features, hidden_size))/1000
 
 def sigmoid(x):
 	return 1/(1+np.exp(-x))
@@ -33,3 +34,13 @@ def get_loss(input, target):
 def backward(loss): 
 
 	pass 
+
+
+x_1 = np.random.multivariate_normal(mean = [1,1], cov = np.eye(2), size = 200).T
+y_1 = [1]*200
+x_2 = np.random.multivariate_normal(mean = [-1,1], cov = np.eye(2), size = 200).T
+y_2 = [-1]*200
+
+plt.scatter(x_1[0,:], x_1[1,:], color = 'r')
+plt.scatter(x_2[0,:], x_2[1,:], color = 'c')
+plt.show() 
