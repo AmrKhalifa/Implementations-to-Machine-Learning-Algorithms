@@ -29,9 +29,13 @@ def forward(x):
 
 def get_loss(input, target):
 
-	pass 
+	p = target
+	q = input 
+	CE = -np.dot(p, np.log(q))
+	return CE 
 
-def backward(loss): 
+def backward(loss):
+	# working the gradients by hand  
 
 	pass 
 
@@ -41,6 +45,6 @@ y_1 = [1]*200
 x_2 = np.random.multivariate_normal(mean = [-1,1], cov = np.eye(2), size = 200).T
 y_2 = [-1]*200
 
-plt.scatter(x_1[0,:], x_1[1,:], color = 'r')
-plt.scatter(x_2[0,:], x_2[1,:], color = 'c')
-plt.show() 
+#plt.scatter(x_1[0,:], x_1[1,:], color = 'r')
+#plt.scatter(x_2[0,:], x_2[1,:], color = 'c')
+#plt.show() 
