@@ -7,6 +7,8 @@ hidden_size = 10
 
 in_to_hid = (np.random.randn(hidden_size, in_features))/1000
 hid_to_out = (np.random.randn(out_features, hidden_size))/1000
+b1 = (np.random.randn(-1, hidden_size))/1000
+b2 = (np.random.randn(-1, out_features))/1000
 
 def sigmoid(x):
 	return 1/(1+np.exp(-x))
@@ -22,8 +24,11 @@ def d_sigmoid(x):
 
 def forward(x):
 	h = in_to_hid.T @ x
+	h += b1
 	h = sigmoid(h)
+
 	output = hid_to_out.T @ h
+	output += b2 
 	output = softmax(output)
 	return output
 
