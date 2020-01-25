@@ -1,73 +1,81 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
 
-in_features = 2
-out_features = 2 
-hidden_size = 10
+class NN():
 
-in_to_hid = (np.random.randn(hidden_size, in_features))/1000
-hid_to_out = (np.random.randn(out_features, hidden_size))/1000
-b1 = (np.random.randn(hidden_size, 1))/1000
-b2 = (np.random.randn(out_features, 1))/1000
+	def __init__(self): 
+		self.in_features = 2
+		self.out_features = 2 
+		self.hidden_size = 10
 
-def sigmoid(x):
-	return 1/(1+np.exp(-x))
+		self.in_to_hid = (np.random.randn(self.hidden_size, self.in_features))/1000
+		self.hid_to_out = (np.random.randn(self.out_features, self.hidden_size))/1000
+		self.b1 = (np.random.randn(self.hidden_size, 1))/1000
+		self.b2 = (np.random.randn(self.out_features, 1))/1000
 
-def softmax(x):
-	x = x.T
-	maxx = np.max(x, axis =0)
-	x = x - maxx
-	exponent = np.exp(x)
-	return exponent/np.sum(exponent)	
+		self.lr = .01
 
-def d_sigmoid(x):
-	return sigmoid(x) * sigmoid(-x)
+	def sigmoid(self, x):
+		return 1/(1+np.exp(-x))
 
-def forward(x):
-	h = in_to_hid @ x
-	h += b1
-	h = sigmoid(h)
+	def softmax(self, x):
+		x = x
+		maxx = np.max(x)
+		x = x - maxx
+		exponent = np.exp(x)
+		output = exponent/np.sum(exponent)
+		return 	output
 
-	logits = hid_to_out @ h
-	logits += b2 
-	output = softmax(logits)
-	return x, h, output
+	def d_sigmoid(self, x):
+		return self.sigmoid(x) * self.sigmoid(-x)
 
-def get_loss(input, target):
+	def forward(self, x):
+		h = self.in_to_hid @ x
+		h += self.b1
+		h = self.sigmoid(h)
 
-	p = target
-	print(input)
-	q = np.argmax(input, axis  =1)
-	print(p == q)
-	CE = -np.dot(q, np.log(p))
-	return CE 
+		logits = self.hid_to_out @ h
+		logits += self.b2 
+		output = self.softmax(logits)
+		output = output
+		return x, h, output
 
-def backward(x, h, output, target):
-	# working the gradients by hand
+	def get_loss(self, input, target):
 
-	d1 = (output - target)
-	d2 = d1.T @ hid_to_out @ d_sigmoid(h)
+		p = target
+		q = input
+		CE = -np.sum(p*np.log(q))
 
-	dw2 = h @ d1.T
-	db2 = d1.T
-	dw1 = d2.T @ x.T
-	db1 = d2. T 
+		return CE 
 
-	pass 
+	def backward(self, x, h, output, target):
+		# working the gradients by hand
+		
+		lr = self.lr 
+		d_1 = (output - target).T	
+		d_2 = (d_1 @ self.hid_to_out)*self.d_sigmoid(h).reshape(1, -1)	
+		dw2 = d_1.T @ h.T
+		db2 = d_1.T
+		dw1 = d_2.T@ x.T
+		db1 = d_2.T
+
+		self.in_to_hid -= lr*dw1
+		self.hid_to_out -= lr*dw2
+		self.b1 -= lr*db1
+		self.b2 -= lr*db2 
+		pass 
 
 
-x_1 = np.random.multivariate_normal(mean = [1,1], cov = np.eye(2), size = 200).T
-y_1 = [1]*200
+x_1 = np.random.multivariate_normal(mean = [1,1], cov = np.eye(2), size = 200)
+x_1 = x_1.reshape(200, 2, 1)
+y_1 = np.array([0, 1]*200).reshape(200,2, 1)
 
-x_2 = np.random.multivariate_normal(mean = [-1,1], cov = np.eye(2), size = 200).T
-y_2 = [0]*200
+x_2 = np.random.multivariate_normal(mean = [-1,1], cov = np.eye(2), size = 200)
+y_2 = np.array([1, 0]*200).reshape(-1, 2)
 
-# plt.scatter(x_1[0,:], x_1[1,:], color = 'r')
-# plt.scatter(x_2[0,:], x_2[1,:], color = 'c')
-# plt.show()
+net = NN()
 
-
-x, h, output = forward(x_1)
-
-print(get_loss(output, y_1))
-#backward(x, h, output, y_1)
+for x, y in zip(x_1, y_1):
+	x, h, output = net.forward(x)
+	print(net.get_loss(output, y)) 
+	net.backward(x, h, output, y)
