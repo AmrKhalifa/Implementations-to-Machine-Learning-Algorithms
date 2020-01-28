@@ -36,9 +36,9 @@ class Dual:
 		return representation
 
 def sin(a):
-	return Dual(math.sin(a.real), math.cos(a.dual)*a.dual)
+	return Dual(math.sin(a.real), math.cos(a.real)*a.dual)
 def cos(a):
-	return Dual(math.cos(a.real), -math.sin(a.dual)*a.dual) 
+	return Dual(math.cos(a.real), -math.sin(a.real)*a.dual) 
 def tan(a):
 	return sin(a)/cos(a) 
 def exp(a):
@@ -50,7 +50,3 @@ def sqrt(a):
 	assert a.real != 0, 'Division by zero error'
 	sq = math.sqrt(a.real)
 	return Dual(sq, a.dual/(2*sq))
-
-x = Dual(1, 2)
-y = Dual(1, 4)
-print(x/y)
