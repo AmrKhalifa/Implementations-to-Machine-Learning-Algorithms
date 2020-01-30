@@ -19,7 +19,6 @@ class NN():
 		return 1/(1+np.exp(-x))
 
 	def softmax(self, x):
-		x = x
 		maxx = np.max(x)
 		x = x - maxx
 		exponent = np.exp(x)
