@@ -10,6 +10,7 @@ from torch.optim import Adam, SGD
 import random
 import matplotlib.pyplot as plt 
 import torch.nn.functional as F 
+import numpy as np 
 
 def findFiles(path): return glob.glob(path)
 
@@ -109,8 +110,12 @@ def train_step():
 	print("loss after processing this example is: ", loss.item())
 	losses.append(loss.item())
 
-for i in range(100000):
+for i in range(20000):
 	train_step()
 
-plt.plot(losses)
+def runningMeanFast(x, N):
+    return np.convolve(x, np.ones((N,))/N)[(N-1):]
+
+mean = runningMeanFast(losses, 100)
+plt.plot(mean)
 plt.show()
