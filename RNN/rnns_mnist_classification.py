@@ -13,6 +13,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
 from torch.optim import Adam
+
 # torch.manual_seed(69)
 
 batch_size = 128
