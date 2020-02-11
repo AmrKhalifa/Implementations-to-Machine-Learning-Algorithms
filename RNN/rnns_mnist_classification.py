@@ -27,14 +27,14 @@ class RNNClassifier(nn.Module):
         
         self.enlarger = nn.Linear(in_features =28, out_features = 100)
         self.recurrent = nn.RNN(input_size = 100, hidden_size = 80)
-        self.reduced = nn.Linear(in_features = 80, out_features = 10)
+        self.reducer = nn.Linear(in_features = 80, out_features = 10)
     
     def forward(self, x):
         enlarged = F.relu(self.enlarger(x))
         out, hidden = self.recurrent(enlarged)
-        output = F.relu(self.reduced(hidden))
+        output = F.relu(self.reducer(hidden))
         
-        return torch.transpose(output, 0,1 ).squeeze()
+        return torch.transpose(output, 0, 1).squeeze()
 
 classifier = RNNClassifier()
 
@@ -85,5 +85,3 @@ def test(model, test_data):
   print("Accuracy is: ", accuracy)
 
 test(trained_model, test_loader)
-
-|
