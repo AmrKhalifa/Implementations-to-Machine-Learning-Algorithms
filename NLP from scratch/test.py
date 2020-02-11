@@ -1,7 +1,14 @@
+import torch
+import torch.nn as nn 
 
+loss = nn.CrossEntropyLoss()
+input = torch.randn(1, 5, requires_grad=True)
+target = torch.empty(1, dtype=torch.long).random_(5)
 
-print("hEllo world")
+print(input, input.shape)
+print(target, target.shape)
+z = torch.tensor(1).flatten()
 
-for i in range(10):
-    print(i+3)
+output = loss(input, target)
+output.backward()
 
