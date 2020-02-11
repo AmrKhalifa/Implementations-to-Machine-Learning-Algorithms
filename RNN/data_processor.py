@@ -1,7 +1,5 @@
-
 import torch
 from torchvision import datasets, transforms
-
 
 train_set = datasets.MNIST(root='../data/', train=True, download=False, 
 	transform=transforms.Compose([
